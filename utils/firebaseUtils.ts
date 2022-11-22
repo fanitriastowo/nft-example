@@ -3,20 +3,28 @@ import { ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../connections/firebase";
 
 export interface NFTDataType {
+  id: string;
   name: string;
   imageUrl: string;
   price: number;
+  symbol: "ETH";
 }
 
-export async function uploadFile(file: File) {
-  const storageRef = ref(storage, "public/" + file.name);
-  return await uploadBytes(storageRef, file);
+export interface FileUploadType {
+  filename: string;
+  file: File;
+}
+
+export async function uploadFile(param: FileUploadType) {
+  const storageRef = ref(
+    storage,
+    `public/${param.filename}.${param.file.name.split(".").pop()}`
+  );
+  return await uploadBytes(storageRef, param.file);
 }
 
 export async function addData(data: NFTDataType) {
-  await setDoc(doc(db, "nfts", data.), {
-    name: "Los Angeles",
-    state: "CA",
-    country: "USA",
+  return await setDoc(doc(db, "nfts", data.id), {
+    data,
   });
 }
