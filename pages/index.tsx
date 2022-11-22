@@ -1,49 +1,8 @@
-import { Box, Center, Input, Spinner, Text, useToast } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
+import FileUpload from "components/FileUpload";
 import Head from "next/head";
-import { ChangeEvent, useCallback, useState } from "react";
-import { addData, uploadFile } from "../utils/firebaseUtils";
-import { createHmac } from "crypto";
-import s from "shortid";
 
 export default function Home() {
-  const [loading, setLoading] = useState(false);
-  const toastr = useToast();
-  const handleFileUpload = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) return;
-      try {
-        setLoading(true);
-
-        // secret or salt to be hashed with
-        const secret = "this is my salt";
-        const sha256Hasher = createHmac("sha256", secret);
-        const hash = sha256Hasher.update(s.generate()).digest("hex");
-
-        const result = await uploadFile({
-          filename: hash.toString(),
-          file: e.target.files[0],
-        });
-        await addData({
-          id: hash.toString(),
-          imageUrl: result.metadata.fullPath,
-          name: "bubba",
-          price: 0.1,
-          symbol: "ETH",
-        });
-
-        toastr({
-          title: "Success",
-          status: "success",
-        });
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.log({ error });
-      }
-    },
-    [toastr]
-  );
-
   return (
     <Box>
       <Head>
@@ -52,19 +11,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {loading && (
-        <Center position="absolute" w="100%" h="100vh" bgColor="blackAlpha.300">
-          <Spinner />
-        </Center>
-      )}
       <Box p="2rem">
         <Text>Yo</Text>
-        <Input
-          placeholder="Select the image"
-          size="md"
-          type="file"
-          onChange={handleFileUpload}
-        />
+        <FileUpload />
       </Box>
     </Box>
   );

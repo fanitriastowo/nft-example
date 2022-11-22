@@ -20,7 +20,7 @@ export async function uploadFile(param: FileUploadType) {
     storage,
     `public/${param.filename}.${param.file.name.split(".").pop()}`
   );
-  return await uploadBytes(storageRef, param.file);
+  return await uploadBytes(storageRef, param.file)
 }
 
 export async function addData(data: NFTDataType) {
