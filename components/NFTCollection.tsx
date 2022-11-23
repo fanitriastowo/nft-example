@@ -1,17 +1,18 @@
 import {
   Box,
   Heading,
+  HStack,
   Image,
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllNFTs, NFTDataType } from "utils/firebaseUtils";
 
 export default function NFTCollection() {
   const [data, setData] = useState<NFTDataType[]>([]);
 
-  useMemo(() => {
+  useEffect(() => {
     getAllNFTs().then((collection) => {
       if (collection.empty) return;
 
@@ -24,11 +25,21 @@ export default function NFTCollection() {
 
   return (
     <Box my="2rem">
-      <Heading size="md">NFT Collection</Heading>
+      <HStack w="100%">
+        <Heading size="md" mb="2rem">
+          NFT Collection
+        </Heading>
+      </HStack>
       <SimpleGrid columns={4} spacing={10}>
         {data.length !== 0 &&
           data.map((nft, index) => (
-            <Box key={index}>
+            <Box
+              key={index}
+              _hover={{ cursor: "pointer" }}
+              border="1px solid black"
+              borderRadius="md"
+              p="1rem"
+            >
               <Image
                 src={nft.imageUrl}
                 alt={nft.imageUrl}
@@ -38,8 +49,9 @@ export default function NFTCollection() {
               />
               <Text>Account: {nft.id}</Text>
               <Text>Name: {nft.name}</Text>
-              <Text>Symbol: {nft.symbol}</Text>
-              <Text>Price: {nft.price}</Text>
+              <Text>
+                Price: {nft.price} {nft.symbol}
+              </Text>
             </Box>
           ))}
       </SimpleGrid>

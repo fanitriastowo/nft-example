@@ -14,13 +14,33 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/connections/*": ["connections"],
-      "@/components/*": ["components"],
-      "@/utils/*": ["utils"]
+      "@/connections/*": ["connections/*"],
+      "@/middlewares": ["middlewares/index"],
+      "@/components/*": ["components/*"],
+      "@/functions/*": ["functions/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/hooks": ["hooks/index"],
+      "@/constants/*": ["constants/*"],
+      "@/states/*": ["states/*"],
+      "@/styles/*": ["styles/*"],
+      "@/public/*": ["public/*"],
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"],
+      "@/utils": ["utils/index"],
+      "@/context": ["context/index"],
+      "@/assets/*": ["assets/*"],
+      "@/contexts/*": ["contexts/*"],
+      "@/interfaces/*": ["interfaces/*"],
+      "@/pages": ["pages/index"],
+      "@/__tests__/*": ["__tests__/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "functions"]
 }

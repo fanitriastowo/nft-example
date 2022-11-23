@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Center,
   HStack,
@@ -12,6 +13,7 @@ import { addData, uploadFile } from "../utils/firebaseUtils";
 import { createHmac } from "crypto";
 import s from "shortid";
 import { getDownloadURL } from "firebase/storage";
+import { useDisconnect } from "wagmi";
 
 interface FormDataType {
   [type: string]: string | File | number;
@@ -21,6 +23,7 @@ export default function FileUpload() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<FormDataType>();
   const toastr = useToast();
+  const { disconnect } = useDisconnect();
 
   const onSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -48,11 +51,15 @@ export default function FileUpload() {
           symbol: "ETH",
         });
 
+        setLoading(false);
         toastr({
           title: "Success",
           status: "success",
+          duration: 3,
+          onCloseComplete: () => {
+            window.location.reload();
+          },
         });
-        setLoading(false);
       } catch (error) {
         setLoading(false);
         console.log({ error });
@@ -61,21 +68,32 @@ export default function FileUpload() {
     [data, toastr]
   );
 
-  const updateData = (e: ChangeEvent<HTMLInputElement>) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.files ? e.target.files[0] : e.target.value,
-    });
-  };
+  const updateData = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setData({
+        ...data,
+        [e.target.name]: e.target.files ? e.target.files[0] : e.target.value,
+      });
+    },
+    [data]
+  );
 
   return (
-    <>
+    <Box>
+      <Button
+        position="absolute"
+        right={5}
+        top={5}
+        onClick={() => disconnect()}
+      >
+        Logout
+      </Button>
       {loading && (
         <Center position="absolute" w="100%" h="100vh" bgColor="blackAlpha.300">
           <Spinner />
         </Center>
       )}
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} method="post">
         <VStack spacing="1rem">
           <Input
             placeholder="Name"
@@ -112,6 +130,6 @@ export default function FileUpload() {
           <Button type="submit">Save</Button>
         </VStack>
       </form>
-    </>
+    </Box>
   );
 }
