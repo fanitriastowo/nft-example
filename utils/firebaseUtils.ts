@@ -1,4 +1,4 @@
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../connections/firebase";
 
@@ -20,11 +20,15 @@ export async function uploadFile(param: FileUploadType) {
     storage,
     `public/${param.filename}.${param.file.name.split(".").pop()}`
   );
-  return await uploadBytes(storageRef, param.file)
+  return await uploadBytes(storageRef, param.file);
 }
 
 export async function addData(data: NFTDataType) {
   return await setDoc(doc(db, "nfts", data.id), {
     data,
   });
+}
+
+export async function getAllNFTs() {
+  return await getDocs(collection(db, "nfts"));
 }

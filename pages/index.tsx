@@ -1,5 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import FileUpload from "components/FileUpload";
+import NFTCollection from "components/NFTCollection";
 import Head from "next/head";
 
 export default function Home() {
@@ -11,9 +12,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Box p="2rem">
-        <Text>Yo</Text>
+      <Box p="5rem">
         <FileUpload />
+        <NFTCollection />
       </Box>
     </Box>
   );
