@@ -6,20 +6,20 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { getAllNFTs, NFTDataType } from "utils/firebaseUtils";
 
 export default function NFTCollection() {
   const [data, setData] = useState<NFTDataType[]>([]);
 
-  useEffect(() => {
-    getAllNFTs().then((collection) => {
-      if (collection.empty) return;
+  useMemo(async () => {
+    const collection = await getAllNFTs();
 
-      collection.forEach((data) => {
-        const nft = data.data() as { data: NFTDataType };
-        setData((prev) => [...prev, { ...nft.data }]);
-      });
+    if (collection.empty) return;
+
+    collection.forEach((data) => {
+      const nft = data.data() as { data: NFTDataType };
+      setData((prev) => [...prev, { ...nft.data }]);
     });
   }, []);
 

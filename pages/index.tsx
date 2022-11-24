@@ -13,8 +13,6 @@ function MainBody() {
     connector: new InjectedConnector(),
   });
 
-  console.log({ address, isConnected });
-
   useEffect(() => {
     if (isConnected && address) {
       setIsLoggedIn(true);
